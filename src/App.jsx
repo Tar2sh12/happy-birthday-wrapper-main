@@ -1,9 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Camera, Gift, Star } from 'lucide-react';
+import { Heart, Camera, Gift, Star, Globe } from 'lucide-react';
 
 const App = () => {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [showAnimation, setShowAnimation] = useState(false);
+  const [language, setLanguage] = useState('en'); // 'en' for English, 'ar' for Arabic
+
+  // Translations
+  const translations = {
+    en: {
+      title: "Happy Birthday, Taroka! 🎉",
+      subtitle: "Celebrating the most amazing father in the world",
+      gratitudeMessage: "Today is your special day, Dad, and I want you to know how grateful I am to have you in my life. Your wisdom, love, and endless support have shaped who I am today.",
+      videoTitle: "A Special Message Just for You",
+      videoDescription: "I made this video especially for you, ya Bob. It's filled with all the love, memories, and gratitude I have in my heart. Press play and know that every moment was created with you in mind. ❤️",
+      videoCaption: "💝 Made with love, just for the best Taroka in the world",
+      specialTitle: "A Father Like No Other",
+      specialMessage1: "Dad, you've been my hero, my guide, and my biggest cheerleader. Your unconditional love has given me the confidence to chase my dreams. The lessons you've taught me, the values you've instilled, and the countless sacrifices you've made have not gone unnoticed.",
+      specialMessage2: "Thank you for being the anchor in my life's storms and the wind beneath my wings. You're not just my father; you're my inspiration and my role model. Here's to celebrating you today and always! 🎂✨",
+      wishesTitle: "Wishing you joy, health, and happiness! 🎈",
+      wishesMessage: "May this new year of your life be filled with wonderful adventures and more videos you will make for our family, precious moments, and all the love you deserve.",
+      downloadVideo: "Download the video here"
+    },
+    ar: {
+      title: "يوم ميلاد سعيد، يا بوب! 🎉",
+      subtitle: "نحتفل بأحسن أب في العالم",
+      gratitudeMessage: "انهارده هو يومك المميز يا بابا، وعايزك أن تعرف مدى امتناني لوجودك في حياتي. حكمتك وحبك ودعمك اللامحدود عملني و كبرني.",
+      videoTitle: "رسالة خاصة ليك انت بس",
+      videoDescription: "عملت الفيديو ده مخصوص يا بوب. مليان بكل الحب والذكريات والامتنان اللي حاطه في قلبي. شغل الفيديو و خليك عارف أن كل لحظة معمولة فالفيديو وأنت في بالي. ❤️",
+      videoCaption: "💝 صنع بحب، لأفضل طاروقة في العالم",
+      specialTitle: "أب لا مثيل له",
+      specialMessage1: "بابا، كنت بطلي ودليلي وأكبر مشجع لي. حبك غير المشروط اداني الثقة عشان احقق أحلامي. الدروس اللي علمتهالي، والقيم التي غرستها فيا، والتضحيات التي لا تُحصى التي قدمتها لم تمر مرور الكرام.",
+      specialMessage2: "شكراً لك لكونك المرساة في عواصف حياتي والريح تحت جناحيّ. أنت لست مجرد أب؛ أنت إلهامي ومثلي الأعلى. ده احتفال بيك انهارده ودائماً! 🎂✨",
+      wishesTitle: "أتمنى ليك الفرح والصحة والسعادة! 🎈",
+      wishesMessage: "اتمنى تكون السنادي الجديدة من حياتك مليانة باللحظات الجامدة وفيديوهات اكتر هتعملها لعائلتنا ان شاء الله، واللحظات الثمينة، وكل الحب اللي تستحقه.",
+      downloadVideo: "حمل الفيديو من هنا"
+    }
+  };
+
+  const currentLang = translations[language];
 
   // Photo placeholders - you can replace these URLs with actual photos
   const photos = [
@@ -24,12 +59,15 @@ const App = () => {
     return () => clearInterval(interval);
   }, [photos.length]);
 
+  const isRTL = language === 'ar';
+
   const containerStyle = {
     minHeight: '100vh',
     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+    fontFamily: isRTL ? "'Noto Sans Arabic', 'Cairo', sans-serif" : "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
     overflow: 'hidden',
-    position: 'relative'
+    position: 'relative',
+    direction: isRTL ? 'rtl' : 'ltr'
   };
 
   const floatingElementStyle = {
@@ -37,6 +75,27 @@ const App = () => {
     opacity: 0.1,
     animation: 'float 6s ease-in-out infinite',
     color: 'white'
+  };
+
+  const languageToggleStyle = {
+    position: 'fixed',
+    top: '20px',
+    right: isRTL ? 'auto' : '20px',
+    left: isRTL ? '20px' : 'auto',
+    zIndex: 1000,
+    background: 'rgba(255, 255, 255, 0.9)',
+    backdropFilter: 'blur(10px)',
+    borderRadius: '12px',
+    padding: '8px 16px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    cursor: 'pointer',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    transition: 'all 0.3s ease',
+    fontSize: '14px',
+    fontWeight: '500',
+    color: '#2d3748'
   };
 
   const headerStyle = {
@@ -168,6 +227,8 @@ const App = () => {
   return (
     <div style={containerStyle}>
       <style jsx>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Noto+Sans+Arabic:wght@400;600;700;800&display=swap');
+        
         @keyframes float {
           0%, 100% { transform: translateY(0px) rotate(0deg); }
           50% { transform: translateY(-20px) rotate(180deg); }
@@ -182,28 +243,42 @@ const App = () => {
         .photo-hover:hover img {
           transform: scale(1.1);
         }
+        .language-toggle:hover {
+          background: rgba(255, 255, 255, 1);
+          transform: scale(1.05);
+        }
       `}</style>
       
+      {/* Language Toggle */}
+      <div 
+        className="language-toggle"
+        style={languageToggleStyle}
+        onClick={() => setLanguage(language === 'en' ? 'ar' : 'en')}
+      >
+        <Globe size={18} />
+        <span>{language === 'en' ? 'العربية' : 'English'}</span>
+      </div>
+      
       {/* Floating decorative elements */}
-      <div style={{...floatingElementStyle, top: '10%', left: '5%', animationDelay: '0s'}}>
+      <div style={{...floatingElementStyle, top: '10%', left: isRTL ? 'auto' : '5%', right: isRTL ? '5%' : 'auto', animationDelay: '0s'}}>
         <Heart size={40} />
       </div>
-      <div style={{...floatingElementStyle, top: '20%', right: '10%', animationDelay: '2s'}}>
+      <div style={{...floatingElementStyle, top: '20%', right: isRTL ? 'auto' : '10%', left: isRTL ? '10%' : 'auto', animationDelay: '2s'}}>
         <Gift size={35} />
       </div>
-      <div style={{...floatingElementStyle, bottom: '15%', left: '8%', animationDelay: '4s'}}>
+      <div style={{...floatingElementStyle, bottom: '15%', left: isRTL ? 'auto' : '8%', right: isRTL ? '8%' : 'auto', animationDelay: '4s'}}>
         <Star size={30} />
       </div>
-      <div style={{...floatingElementStyle, bottom: '25%', right: '5%', animationDelay: '1s'}}>
+      <div style={{...floatingElementStyle, bottom: '25%', right: isRTL ? 'auto' : '5%', left: isRTL ? '5%' : 'auto', animationDelay: '1s'}}>
         <Camera size={45} />
       </div>
 
       <header style={headerStyle}>
         <h1 style={titleStyle}>
-          Happy Birthday, Taroka! 🎉
+          {currentLang.title}
         </h1>
         <p style={subtitleStyle}>
-          Celebrating the most amazing father in the world
+          {currentLang.subtitle}
         </p>
       </header>
 
@@ -212,9 +287,7 @@ const App = () => {
           <div style={messageStyle}>
             <p>
               <Heart style={iconStyle} size={24} color="#FF6B6B" />
-              Today is your special day, Dad, and I want you to know how grateful I am 
-              to have you in my life. Your wisdom, love, and endless support have shaped 
-              who I am today.
+              {currentLang.gratitudeMessage}
               <Heart style={iconStyle} size={24} color="#FF6B6B" />
             </p>
           </div>
@@ -267,7 +340,7 @@ const App = () => {
               gap: '0.5rem'
             }}>
               <Camera size={32} color="#667eea" />
-              A Special Message Just for You
+              {currentLang.videoTitle}
             </h2>
             <p style={{
               fontSize: 'clamp(1rem, 3vw, 1.2rem)',
@@ -275,9 +348,7 @@ const App = () => {
               marginBottom: '2rem',
               lineHeight: '1.6'
             }}>
-              I made this video especially for you, ya Bob. It's filled with all the love, 
-              memories, and gratitude I have in my heart. Press play and know that 
-              every moment was created with you in mind. ❤️
+              {currentLang.videoDescription}
             </p>
             <video 
               controls 
@@ -287,7 +358,7 @@ const App = () => {
               <source src={videoUrl} type="video/mp4" />
               <source src={videoUrl.replace('.mp4', '.webm')} type="video/webm" />
               Your browser does not support the video tag. 
-              <a href={videoUrl} style={{color: '#667eea'}}>Download the video here</a>
+              <a href={videoUrl} style={{color: '#667eea'}}>{currentLang.downloadVideo}</a>
             </video>
             <p style={{
               fontSize: '0.9rem',
@@ -295,7 +366,7 @@ const App = () => {
               marginTop: '1rem',
               fontStyle: 'italic'
             }}>
-              💝 Made with love, just for the best Taroka in the world
+              {currentLang.videoCaption}
             </p>
           </div>
         </div>
@@ -304,7 +375,8 @@ const App = () => {
           <div style={{
             position: 'absolute',
             top: '10px',
-            right: '10px',
+            right: isRTL ? 'auto' : '10px',
+            left: isRTL ? '10px' : 'auto',
             opacity: '0.3'
           }}>
             <Star size={60} />
@@ -314,18 +386,13 @@ const App = () => {
             marginBottom: '1rem',
             fontWeight: '700'
           }}>
-            A Father Like No Other
+            {currentLang.specialTitle}
           </h2>
           <p>
-            Dad, you've been my hero, my guide, and my biggest cheerleader. 
-            Your unconditional love has given me the confidence to chase my dreams. 
-            The lessons you've taught me, the values you've instilled, and the 
-            countless sacrifices you've made have not gone unnoticed.
+            {currentLang.specialMessage1}
           </p>
           <p style={{marginTop: '1rem'}}>
-            Thank you for being the anchor in my life's storms and the wind 
-            beneath my wings. You're not just my father; you're my inspiration 
-            and my role model. Here's to celebrating you today and always! 🎂✨
+            {currentLang.specialMessage2}
           </p>
         </div>
 
@@ -339,11 +406,10 @@ const App = () => {
             fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
             marginBottom: '1rem'
           }}>
-            Wishing you joy, health, and happiness! 🎈
+            {currentLang.wishesTitle}
           </h3>
           <p style={{fontSize: 'clamp(1rem, 3vw, 1.2rem)'}}>
-            May this new year of your life be filled with wonderful adventures and more videos you will make for our family, 
-            precious moments, and all the love you deserve.
+            {currentLang.wishesMessage}
           </p>
         </div>
       </div>
